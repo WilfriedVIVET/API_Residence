@@ -1,7 +1,6 @@
 <?php
 
 //Routage des pages.
-
 require_once("./api.php");
 
 try{
@@ -24,8 +23,13 @@ try{
             case"dessert":
                 getDessert();
                 break;
-            case"post-menu":
-                getMenu();
+            case"restaurant":
+                if(!empty($url[1])){
+                    
+                    getMenu($url[1]);
+                }else{
+                    throw new Exception("Cette page n'existe pas");
+                }
                 break;
             default:
                 throw new Exception("Cette page n'existe pas");    

@@ -8,38 +8,13 @@ function sendJson($data){
     echo json_encode ($data,JSON_UNESCAPED_UNICODE);   
 }
 
-function getPlats (){
-    try{
-        $pdo = getConnect();
 
-     if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
-        INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
-        INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
-        GROUP BY titre";
-        $stmt = $pdo->prepare($req);
-        $stmt->execute();
-        $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-        sendJson($menus);
-    }else{
-        throw new Exception("La connexion à la base de données a échoué.");
-    }
-} catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
-} finally {
-        // Fermeture de la connexion PDO 
-        if ($pdo) {
-        $pdo = null;
-       }
-   }
-}
 function getEntre(){
     try{
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
+        $req = "SELECT p.titre, p.datedmm, c.categorie FROM plat p
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Entrée'
@@ -53,7 +28,7 @@ function getEntre(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "erreur entrée" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
@@ -66,7 +41,7 @@ function getPlat(){
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
+        $req = "SELECT p.titre, p.datedmm, c.categorie FROM plat p
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Plat'
@@ -80,7 +55,7 @@ function getPlat(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "erreur plat" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
@@ -93,7 +68,7 @@ function getAccompagnement(){
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
+        $req = "SELECT p.titre, p.datedmm,c.categorie FROM plat p
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Accompagnement'
@@ -107,7 +82,7 @@ function getAccompagnement(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "erreur accompagnement" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
@@ -120,7 +95,7 @@ function getFromage(){
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
+        $req = "SELECT p.titre, p.datedmm,c.categorie FROM plat p
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Fromage'
@@ -134,7 +109,7 @@ function getFromage(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "erreur fromage" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
@@ -147,7 +122,7 @@ function getDessert(){
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT p.titre, p.datedmm, p.notemoyenne, c.categorie FROM plat p
+        $req = "SELECT p.titre, p.datedmm, c.categorie FROM plat p
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Dessert'
@@ -161,7 +136,7 @@ function getDessert(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "erreur dessert" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
@@ -170,13 +145,14 @@ function getDessert(){
    }
 }
 
-function getMenu(){
+function getMenu($date){
     try{
         $pdo = getConnect();
 
      if($pdo){
-        $req = "SELECT * FROM menu";
+        $req = "SELECT * FROM menu Where dateDay = :date";
         $stmt = $pdo->prepare($req);
+        $stmt->bindValue(':date',$date, PDO::PARAM_STR);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
@@ -185,7 +161,7 @@ function getMenu(){
         throw new Exception("La connexion à la base de données a échoué.");
     }
 } catch (Exception $e) {
-    sendJson(['error' => "erreur" . $e->getMessage()]);
+    sendJson(['error' => "Pas de menu pour ce jour" . $e->getMessage()]);
 } finally {
         // Fermeture de la connexion PDO 
         if ($pdo) {
