@@ -36,6 +36,7 @@ function postMenu($dateDay,$entre1,$entre2,$entre3,$plat1,$plat2,$accompagnement
             $stmt->execute();
             echo json_encode(["message"=>"Nouveau menu bien enregistré"]);
            
+            
         }
     }
 
