@@ -31,6 +31,9 @@ try{
                     throw new Exception("Cette page n'existe pas");
                 }
                 break;
+            case"utilisateur":
+                getUtilisateur();
+                break;    
             default:
                 throw new Exception("Cette page n'existe pas");    
          }

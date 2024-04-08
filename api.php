@@ -169,3 +169,41 @@ function getMenu($date){
        }
    }
 }
+
+function getUtilisateur(){
+    try{
+        $pdo = getConnect();
+
+        if($pdo){
+           $req = "SELECT 
+           u.utilisateur_id,
+           u.nom,
+           u.prenom,
+           u.appt,
+           u.mixed,
+           GROUP_CONCAT(DISTINCT r.role) AS role
+       FROM 
+           utilisateur u
+       LEFT JOIN 
+           role_utilisateur ru ON u.utilisateur_id = ru.id_utilisateur
+       LEFT JOIN 
+           role r ON ru.id_role = r.id_role
+       GROUP BY 
+           u.nom, u.prenom, u.appt, u.mixed;";
+           $stmt = $pdo->prepare($req);
+           $stmt->execute();
+           $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           $stmt->closeCursor();
+           sendJson($users);
+       }else{
+           throw new Exception("La connexion à la base de données a échoué.");
+       }
+    }catch(Exception $e){
+        sendJson(['error' => "Pas d'utilisateur" .$e->getMessage()]);
+    }finally{
+         // Fermeture de la connexion PDO 
+         if ($pdo) {
+            $pdo = null;
+         }
+    }
+}

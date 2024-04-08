@@ -17,6 +17,7 @@ function postMenu($dateDay,$entre1,$entre2,$entre3,$plat1,$plat2,$accompagnement
             echo json_encode(["message"=>"Un menu existe déjà pour cette date"]);
             
         }else{
+            //Insertion du menu en BDD
             $req = "INSERT INTO menu (dateDay,entre1,entre2,entre3,plat1,plat2,accompagnement1,accompagnement2,fromage1,fromage2,dessert1,dessert2,jour)
             VALUES (:dateDay, :entre1, :entre2, :entre3, :plat1, :plat2, :accompagnement1, :accompagnement2, :fromage1, :fromage2, :dessert1, :dessert2, :jour)";
             $stmt = $pdo->prepare($req);
@@ -34,20 +35,32 @@ function postMenu($dateDay,$entre1,$entre2,$entre3,$plat1,$plat2,$accompagnement
             $stmt->bindParam(':dessert2', $dessert2, PDO::PARAM_STR);
             $stmt->bindParam(':jour', $jour, PDO::PARAM_STR);
             $stmt->execute();
-            echo json_encode(["message"=>"Nouveau menu bien enregistré"]);
            
+           
+            //Insertion de la date (dateDay) de chaque plat du menu
+            $plats =array( $entre1, $entre2, $entre3, $plat1, $plat2, $accompagnement1, $accompagnement2, $fromage1, $fromage2, $dessert1, $dessert2);
+                foreach($plats as $plat){
+                    $req="UPDATE plat SET datedmm = :dateDay WHERE titre = :plat";
+                    $stmtUpdate = $pdo->prepare($req);
+                    $stmtUpdate->bindParam(':plat',$plat, PDO::PARAM_STR);
+                    $stmtUpdate->bindParam(':dateDay',$dateDay, PDO::PARAM_STR);
+                    $stmtUpdate->execute();
+                }
+                echo json_encode(["message"=>"Nouveau menu bien enregistré"]);
             
         }
+        
     }
 
 }catch(Exception $e){
-    echo json_encode(["message"=>"problème lors de l'enregistrement du menu"]);
+    echo json_encode(["message"=>"problème lors de l'enregistrement du menu " . $dateDay . "." .$e]);
 }finally{
     //Fermeture de la connexion PDO.
     if ($pdo){
         $pdo = null;
     }
-    }
+   
+}
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -56,7 +69,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Vérification si les données nécessaires sont présentes
 if (isset($data['dateDay'], $data['entre1'], $data['entre2'], $data['entre3'], $data['plat1'], $data['plat2'], $data['accompagnement1'], $data['accompagnement2'], $data['fromage1'], $data['fromage2'], $data['dessert1'], $data['dessert2'], $data['jour'])) {
     
-    $dateDay = $data['dateDay'];  
+    $dateDay = $data['dateDay']; 
     $entre1 = $data['entre1'];
     $entre2 = $data['entre2'];
     $entre3 = $data['entre3'];
