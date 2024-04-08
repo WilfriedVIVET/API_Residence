@@ -207,3 +207,31 @@ function getUtilisateur(){
          }
     }
 }
+
+//Récupération des dates des menus déja en base de donnée pour le mois selectionné.
+function getDateMenu($month){
+    try{
+        $pdo = getConnect();
+
+     if($pdo){
+        $req = "SELECT dateDay
+        FROM menu
+        WHERE EXTRACT(MONTH FROM dateDay) = :month";
+        $stmt = $pdo->prepare($req);
+        $stmt->bindValue(':month',$month, PDO::PARAM_INT);
+        $stmt->execute();
+        $date = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        sendJson($date);
+    }else{
+        throw new Exception("La connexion à la base de données a échoué.");
+    }
+} catch (Exception $e) {
+    sendJson(['error' => "erreur récupération date" . $e->getMessage()]);
+} finally {
+        // Fermeture de la connexion PDO 
+        if ($pdo) {
+        $pdo = null;
+       }
+   }
+}

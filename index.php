@@ -33,6 +33,13 @@ try{
                 break;
             case"utilisateur":
                 getUtilisateur();
+                break;  
+            case"datemenu":
+                if(!empty($url[1])){
+                    getDateMenu($url[1]);
+                }else{
+                    throw new Exception("Cette page n'existe pas");
+                }
                 break;    
             default:
                 throw new Exception("Cette page n'existe pas");    
