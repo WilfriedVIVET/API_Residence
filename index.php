@@ -33,7 +33,7 @@ try{
                 break;
             case"utilisateur":
                 getUtilisateur();
-                break;  
+                break;   
             case"datemenu":
                 if(!empty($url[1])){
                     getDateMenu($url[1]);

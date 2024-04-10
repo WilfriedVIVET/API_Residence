@@ -18,7 +18,8 @@ function getEntre(){
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Entrée'
-        GROUP BY titre";
+        GROUP BY titre
+        ORDER BY p.titre";
         $stmt = $pdo->prepare($req);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -45,7 +46,8 @@ function getPlat(){
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Plat'
-        GROUP BY titre";
+        GROUP BY titre
+        ORDER BY p.titre";
         $stmt = $pdo->prepare($req);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,7 +74,8 @@ function getAccompagnement(){
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Accompagnement'
-        GROUP BY titre";
+        GROUP BY titre
+        ORDER BY p.titre";
         $stmt = $pdo->prepare($req);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,7 +102,8 @@ function getFromage(){
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Fromage'
-        GROUP BY titre";
+        GROUP BY titre
+        ORDER bY p.titre";
         $stmt = $pdo->prepare($req);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -126,7 +130,8 @@ function getDessert(){
         INNER JOIN plat_categorie pc ON p.plat_id = pc.id_plat
         INNER JOIN categorie c ON pc.id_categorie = c.id_categorie
         WHERE c.categorie = 'Dessert'
-        GROUP BY titre";
+        GROUP BY titre
+        ORDER BY p.titre";
         $stmt = $pdo->prepare($req);
         $stmt->execute();
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -235,3 +240,5 @@ function getDateMenu($month){
        }
    }
 }
+
+

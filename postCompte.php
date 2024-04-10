@@ -26,7 +26,7 @@ function postCompte($nom,$prenom,$password,$numAppart,$mixe,$role){
                 $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
                 $stmt->bindParam(':numAppart', $numAppart, PDO::PARAM_INT);
                 //hash du password
-                $stmt->bindValue(':password', password_hash($password, PASSWORD_BCRYPT),PDO::PARAM_STR);
+                $stmt->bindValue(':password', password_hash($password, PASSWORD_BCRYPT), PDO::PARAM_STR);
                 $stmt->bindParam(':mixe', $mixe, PDO::PARAM_BOOL);
                 $stmt->execute();
             
@@ -65,7 +65,7 @@ if (isset($data['nom'], $data['prenom'],$data['password'],$data['numAppart'],$da
        $prenom = $data['prenom'];
        $password = $data['password'];
        $numAppart = $data['numAppart'];
-       $mixe = $data['mixe'];
+       $mixe = isset($data['mixe']) ? $data['mixe'] : 0;
        $role = $data['role'];
 
     postCompte($nom,$prenom,$password,$numAppart,$mixe,$role);
