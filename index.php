@@ -31,6 +31,13 @@ try{
                     throw new Exception("Cette page n'existe pas");
                 }
                 break;
+            case"restaurantmois":
+                if(!empty($url[1])){
+                    getMonthMenu($url[1]);
+                }else{
+                    throw new Exception("Cette page n'existe pas");
+                }
+                break;    
             case"utilisateur":
                 getUtilisateur();
                 break;   

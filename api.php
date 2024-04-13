@@ -175,6 +175,34 @@ function getMenu($date){
    }
 }
 
+//Fonction qui récupére tous les menus existant du mois.
+function getMonthMenu($date){
+    try{
+        $pdo = getConnect();
+
+     if($pdo){
+        $req = "SELECT * FROM menu Where Month(dateDay) = :date";
+        $stmt = $pdo->prepare($req);
+        $stmt->bindValue(':date',$date, PDO::PARAM_STR);
+        $stmt->execute();
+        $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        sendJson($menus);
+    }else{
+        throw new Exception("La connexion à la base de données a échoué.");
+    }
+} catch (Exception $e) {
+    sendJson(['error' => "Pas de menu pour ce jour" . $e->getMessage()]);
+} finally {
+        // Fermeture de la connexion PDO 
+        if ($pdo) {
+        $pdo = null;
+       }
+   }
+}
+
+
+
 function getUtilisateur(){
     try{
         $pdo = getConnect();
